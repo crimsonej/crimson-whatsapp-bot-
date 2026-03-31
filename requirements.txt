@@ -5,3 +5,4 @@ duckduckgo-search
 gunicorn
 # together - removed as per bot.py comment
 yt-dlp
+groq

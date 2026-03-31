@@ -229,5 +229,37 @@
     "preferences": {},
     "last_seen": null,
     "first_seen": "2026-03-25T20:03:06.399096"
+  },
+  "250203957407887@lid": {
+    "phone": "250203957407887@lid",
+    "name": null,
+    "facts": [
+      "username is \"bro\"",
+      "user initiated conversation",
+      "user is informal.",
+      "user wants to register an image",
+      "user has initiated a registration process",
+      "user is interacting with a system that supports image registration.",
+      "informal language used",
+      "uses slang (mn",
+      "u",
+      "wats)",
+      "likely young adult or teenager",
+      "familiar with texting or online communication",
+      "possibly casual or friendly tone.",
+      "interested in stock market",
+      "looking for current best performing stocks",
+      "potentially active in finance or investing.",
+      "user is interacting with an assistant",
+      "user asked about latest iphone models 2026",
+      "user is having trouble with the assistant's response.",
+      "user is likely frustrated",
+      "user is likely waiting for someone to follow through on a task",
+      "user is possibly interacting with someone they know",
+      "user is using informal language."
+    ],
+    "preferences": {},
+    "last_seen": null,
+    "first_seen": "2026-03-31T11:10:52.773701"
   }
 }

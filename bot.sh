@@ -116,7 +116,8 @@ activate_venv() {
 # Python dependency management  (only installs what is missing)
 # ─────────────────────────────────────────────────────────────────────────────
 
-REQUIRED_PKGS=(flask requests together python-dotenv)
+REQUIRED_PKGS=(flask requests python-dotenv duckduckgo-search gunicorn groq)
+
 
 check_and_install() {
     create_venv
