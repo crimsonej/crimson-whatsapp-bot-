@@ -18,28 +18,34 @@ A lightweight, RAG-powered WhatsApp auto-reply server built for Termux and Linux
 ### Prerequisite
 
 1.  **Groq API Key:** Get one at [console.groq.com](https://console.groq.com/).
-2.  **Hugging Face API Key:** (Optional, for higher quality images) Get one at [huggingface.co](https://huggingface.co/).
+2.  **Hugging Face API Key:** (Optional) [huggingface.co](https://huggingface.co/).
+3.  **NVIDIA API Key:** (Optional, for Vision) [build.nvidia.com](https://build.nvidia.com/).
 
 ### Quick Install (Linux/Termux)
 
-```bash
-# Clone the repository (if you haven't)
-# git clone <repo_url>
-# cd groq-bot
+The "Ultimate Installer" handles everything from system dependencies to environment security.
 
-# Run the setup script
+```bash
+# Clone the repository
+git clone <repo_url>
+cd groq-bot
+
+# Run the installer
 bash setup.sh
 ```
 
 ### Manual Configuration
 
-1.  Create a `.env` file from the template:
+If you prefer to manually configure your environment:
+1.  Copy `config.json.example` to `config.json`.
+2.  Create a `.env` file from the template:
     ```env
     GROQ_API_KEY=your_key_here
     HF_API_KEY=your_hf_key_here
+    NVIDIA_API_KEY=your_nvidia_key_here
     BOT_PORT=5000
     ```
-2.  Start the bot:
+3.  Start the bot:
     ```bash
     bot start
     ```
@@ -60,7 +66,7 @@ bash setup.sh
 
 Edit `config.json` or use `bot config` to tune:
 - `relevance_threshold`: Higher (0.15+) makes the bot more selective; lower (0.05) makes it more talkative.
-- `session_ttl`: How long the bot remembers conversation context (default 30 min).
+- `session_ttl`: How long the bot remembers conversation context.
 - `model`: Choose from `llama-3.1-8b-instant`, `llama-3.3-70b-versatile`, etc.
 
 ## ❓ Troubleshooting
@@ -81,9 +87,3 @@ Edit `config.json` or use `bot config` to tune:
 
 Created by **Crimson (Elijah)**. Optimized for performance and personality.
 For bugs, please check `bot.log` or run `bot logs`.
-# crimson-whatsapp-bot-
-# crimson-whatsapp-bot-
-# crimson-whatsapp-bot-
-# crimson-whatsapp-bot-
-# crimson-whatsapp-bot-
-# crimson-whatsapp-bot-

@@ -1,0 +1,9 @@
+{
+  "api_key": "",
+  "hf_api_key": "",
+  "nvidia_api_key": "",
+  "model": "llama-3.3-70b-versatile",
+  "relevance_threshold": 0.08,
+  "session_ttl": 1800,
+  "session_max_turns": 8
+}

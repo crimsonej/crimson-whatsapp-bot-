@@ -22,23 +22,37 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Virtual Env
+# Virtual Environments
 venv/
 env/
 ENV/
-.env
-.venv
+.venv/
 
-# IDE
+# Environment and Secrets
+.env
+config.json
+.named_tunnel
+cloudflare/
+tunnel.url
+
+# Runtime Data and Logs
+*.log
+*.pid
+user_profiles.json
+cache.json
+vectors.json
+sticker_cache/
+bot.pid
+bot.log
+cloudflared.log
+cloudflared.pid
+
+# IDEs
 .vscode/
 .idea/
-*.log
-*.pid
-config.json
-*.log
-*.pid
-tunnel.url
-config.json
-*.log
-*.pid
-tunnel.url
+*.swp
+*.swo
+
+# Local OS
+.DS_Store
+Thumbs.db

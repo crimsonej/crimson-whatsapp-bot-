@@ -11,12 +11,13 @@ CACHE_TTL = 300  # 5 minutes
 
 # Keywords and question starters that trigger a web search
 REALTIME_KEYWORDS = {
-    'news', 'price', 'score', 'match', 'today', 'now',
+    'news', 'price', 'score', 'match', 'today', 'now', 'latest',
     'current', 'forecast', 'stock', 'bitcoin', 'ethereum',
-
     'president', 'election', 'results', 'poll', 'game', 'sport',
     'who is', 'what is', 'where is', 'when did', 'how to', 'why did',
-    'define', 'meaning of', 'population', 'capital', 'location'
+    'define', 'meaning of', 'population', 'capital', 'location',
+    'info on', 'about the', 'fees', 'specs', 'cost', 'date',
+    'when is', 'release', 'how much', 'details', 'structure'
 }
 
 def needs_realtime_heuristic(query):
@@ -35,20 +36,34 @@ def search_web(query, max_results=3):
             return result
 
     try:
-        ddgs = DDGS()
-        results = list(ddgs.text(query, max_results=max_results))
+        # We iterate over stable modern DDGS engines for reliability and speed.
+        backends = ['duckduckgo', 'google', 'brave']
+        results = []
+
+        for backend in backends:
+            try:
+                with DDGS() as ddgs:
+                    # Try passing backend explicitly
+                    res = list(ddgs.text(query, max_results=max_results, backend=backend))
+                    if res and len(res) > 0:
+                        results = res
+                        break
+            except Exception as e:
+                logger.debug(f"DDGS backend '{backend}' failed: {e}")
+                continue
+
         if not results:
             return {"error": "No results found"}
 
         formatted = {
-            "answer": results[0].get('body', '')[:300],
+            "answer": results[0].get('body', '')[:200],
             "results": [
                 {
-                    "title": r.get('title', ''),
-                    "content": r.get('body', '')[:500],
+                    "title": r.get('title', '')[:100],
+                    "content": r.get('body', '')[:300],
                     "url": r.get('href', '')
                 }
-                for r in results[:max_results]
+                for r in results[:2]
             ]
         }
         # Cache the result

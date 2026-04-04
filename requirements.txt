@@ -6,3 +6,4 @@ gunicorn
 # together - removed as per bot.py comment
 yt-dlp
 groq
+tiktoken

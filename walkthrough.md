@@ -1,34 +1,28 @@
-# Walkthrough: Groq Bot Migration and Enhancements
+# Walkthrough: Advanced Sticker Pipeline
 
-I have successfully updated the bot to use the official `groq` Python library, resolved the 400 error by updating the AI model, and added support for the `crimsonej /` message prefix.
+The sticker handling system has been upgraded to provide more creative and relevant responses. Instead of just describing stickers, the bot now generates a matching AI-style sticker in return.
 
-## Changes Made
+## Key Enhancements
 
-### 1. Groq Client Migration
-- **Library Integration**: Replaced raw `requests` calls with the official `groq` library for better performance and native tool-calling support.
-- **Client Initialization**: Added `client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))` at the module level.
-- **Function Refactoring**: Updated `call_groq` and `extract_facts` to utilize the new client-based API.
+### 1. Intelligent Interpretation
+- **Concept Analysis**: The bot now uses NVIDIA's vision model to extract the "mood or concept" of a sticker in 1-3 words (e.g., "sad cat", "celebration").
+- **Creative Translation**: This concept is then used as a prompt for a new AI-generated sticker.
 
-### 2. Prefix Handling
-- **New Logic**: Added a check at the start of the `/reply` endpoint to handle messages starting with `crimsonej /`.
-- **User Benefit**: The bot now treats `crimsonej /imagine a cat` exactly the same as `/imagine a cat`.
+### 2. Standardized Sticker Format
+- **Professional Cropping**: FFmpeg now uses `force_original_aspect_ratio=increase,crop=512:512` to ensure generated stickers are perfectly square and fill the space.
+- **Optimized Size**: Compression is set to **Quality 70** to ensure the WebP sticker file is efficient and under the 1MB WhatsApp limit.
 
-### 3. Model Update & 400 Error Fix
-- **Model Change**: Updated the default model from `llama-3.1-70b-versatile` to `llama-3.3-70b-versatile`.
-- **Cause of 400 Error**: Resolved potential API incompatibilities and ensured the model name aligns with current Groq supported versions.
+### 3. Visual Aesthetic
+- **Minimalist Design**: Every generated sticker follows a "flat, colorful, minimalist" style to ensure they look like actual stickers rather than just small photos.
 
-### 4. Dependency Updates
-- **`requirements.txt`**: Added `groq` to the project's dependencies.
-- **`bot.sh`**: Added `groq` to the `REQUIRED_PKGS` list to ensure it is automatically installed on startup.
+## Implementation Details
 
-## Verification
+### Bot Server (`bot.py`)
+- Updated the sticker block in `route_reply` to perform the new two-step (interpretation then generation) flow.
+- Refined `generate_sticker_huggingface` to use the new FFmpeg filters.
 
-- **Dependency Check**: Verified `groq` is installed in the virtual environment.
-- **Code Review**: Confirmed prefix handling is applied before any other command processing.
-- **NVIDIA Integration**: Verified NVIDIA vision analysis remains untouched and functional.
-
-> [!TIP]
-> You can now restart your bot using `./bot.sh restart` to apply these changes.
+### WhatsApp Bridge (`bridge.js`)
+- **No changes required**: The existing base64 sticker sender in the bridge is already compatible with the new response format.
 
 ---
-All requested fixes and enhancements are now live in the project files.
+Your bot is now ready to engage in "sticker battles" by responding to every sticker it receives with an AI-generated equivalent!
