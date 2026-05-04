@@ -1442,7 +1442,7 @@ def handle_commands(raw_question: str, user_phone: str, session_id: str, quoted:
         prompt = raw_question[9:].strip()
         if not prompt:
             return {"reply": "Please provide a prompt. Example: `/sticker happy cat`"}
-        stk = generate_sticker_huggingface(prompt)
+        stk = generate_sticker_auto(prompt)
         if stk:
             return {"sticker": stk, "reply": "✨ Here's your sticker!"}
         return {"reply": "Failed to generate sticker."}
