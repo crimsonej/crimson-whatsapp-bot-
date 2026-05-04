@@ -21,9 +21,9 @@ A lightweight, RAG-powered WhatsApp auto-reply server built for Termux and Linux
 2.  **Hugging Face API Key:** (Optional) [huggingface.co](https://huggingface.co/).
 3.  **NVIDIA API Key:** (Optional, for Vision) [build.nvidia.com](https://build.nvidia.com/).
 
-### Quick Install (Linux/Termux)
+### Quick Install (Cross-Platform)
 
-The "Ultimate Installer" handles everything from system dependencies to environment security.
+The cross-platform Python installer will automatically check for the bridge, install dependencies, and configure background processes (via PM2 or similar).
 
 ```bash
 # Clone the repository
@@ -31,8 +31,9 @@ git clone <repo_url>
 cd groq-bot
 
 # Run the installer
-bash setup.sh
+python3 install.py
 ```
+*Note: Make sure `python3` and `pip` are installed on your system.*
 
 ### Manual Configuration
 
@@ -65,9 +66,10 @@ If you prefer to manually configure your environment:
 ## 🛠️ Advanced Configuration
 
 Edit `config.json` or use `bot config` to tune:
+- **Multi-Model Setup (OpenClaw style):** You can define multiple `providers` (Groq, NVIDIA, HuggingFace) and a list of `models` to allow easy switching between a primary model and fallbacks.
 - `relevance_threshold`: Higher (0.15+) makes the bot more selective; lower (0.05) makes it more talkative.
 - `session_ttl`: How long the bot remembers conversation context.
-- `model`: Choose from `llama-3.1-8b-instant`, `llama-3.3-70b-versatile`, etc.
+- `active_model`: The ID of the currently active model (e.g. `llama-3.3-70b-versatile`).
 
 ## ❓ Troubleshooting
 

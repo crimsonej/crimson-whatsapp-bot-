@@ -107,7 +107,7 @@ def analyze_image_with_nvidia(image_base64, prompt="Describe this image in detai
     Analyze image using NVIDIA's Llama-3.1-Nemotron-Nano-VL model.
     Encapsulated for direct priority calls or vision-context injection.
     """
-    api_key = os.getenv("NVIDIA_API_KEY")
+    api_key = _cfg.get("providers", {}).get("nvidia", os.getenv("NVIDIA_API_KEY"))
     if not api_key:
         return "NVIDIA API key not configured."
 
@@ -389,6 +389,8 @@ FORMAT_AUDIO = "bestaudio[ext=m4a]/bestaudio/best"
 
 # Defaults – all overridable via config.json or environment variables
 _DEFAULTS: dict[str, Any] = {
+    "providers":         {},
+    "models":            [],
     "api_key":           "",
     "model":             "llama-3.3-70b-versatile",
 
@@ -474,12 +476,26 @@ def load_config() -> None:
     global _cfg
     _cfg = load_json(CFG, {})
 
+    if "providers" not in _cfg:
+        _cfg["providers"] = {}
+
+    # Migrate flat keys to providers
+    if "api_key" in _cfg and not _cfg["providers"].get("groq"):
+        _cfg["providers"]["groq"] = _cfg["api_key"]
+    if "nvidia_api_key" in _cfg and not _cfg["providers"].get("nvidia"):
+        _cfg["providers"]["nvidia"] = _cfg["nvidia_api_key"]
+    if "hf_api_key" in _cfg and not _cfg["providers"].get("huggingface"):
+        _cfg["providers"]["huggingface"] = _cfg["hf_api_key"]
+
     # Use environment variables if present (highest priority)
     if GROQ_API_KEY:
+        _cfg["providers"]["groq"] = GROQ_API_KEY
         _cfg["api_key"] = GROQ_API_KEY
     if HF_API_KEY:
+        _cfg["providers"]["huggingface"] = HF_API_KEY
         _cfg["hf_api_key"] = HF_API_KEY
     if NVIDIA_API_KEY:
+        _cfg["providers"]["nvidia"] = NVIDIA_API_KEY
         _cfg["nvidia_api_key"] = NVIDIA_API_KEY
         
     if os.environ.get("BOT_PORT"):
@@ -501,7 +517,7 @@ def cfg(key: str) -> Any:
 
 def get_api_key(interactive: bool = False) -> str:
     """Return the configured Groq API key."""
-    key = cfg("api_key")
+    key = _cfg.get("providers", {}).get("groq", cfg("api_key"))
     if key:
         return key
 
@@ -1335,6 +1351,7 @@ def handle_commands(raw_question: str, user_phone: str, session_id: str, quoted:
     # ── Help command ─────────────────────────────────────────────────────────
     if lower == "/help" or lower.startswith("/help "):
         help_text = (
+            "🤖 *Crimsonej Commands* 🤖\n\n"
             "📄 */read [prompt]* - Summarize or answer questions about a PDF/Docx\n"
             "🧠 */learn* - Permanently store info/docs in my long-term memory\n"
             "🗣️ */say <text>* - Make me say something in my new voice\n"
@@ -1345,7 +1362,8 @@ def handle_commands(raw_question: str, user_phone: str, session_id: str, quoted:
             "🎵 */song-audio <name>* - Download any song as audio\n"
             "🎬 */song-video <name>* - Download any video/song as MP4\n"
             "🗣️ */respond <prompt>* - Instruct me on how to reply to a quoted message\n\n"
-            "💡 *Pro Tip:* You can also send or reply to images/stickers for instant analysis!"
+            "💡 *Pro Tip:* You can also send or reply to images/stickers for instant analysis!\n\n"
+            "👤 *Creator:* Crimsone | 🔗 *GitHub:* https://github.com/crimsonej"
         )
         return {"reply": help_text}
 

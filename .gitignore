@@ -57,3 +57,7 @@ bridge.log
 # Local OS
 .DS_Store
 Thumbs.db
+
+# PM2 Ecosystem
+ecosystem.config.js
+ecosystem.config.cjs
