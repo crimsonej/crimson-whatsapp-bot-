@@ -1,4 +1,4 @@
-# Python
+# Python Environment
 __pycache__/
 *.py[cod]
 *$py.class
@@ -46,6 +46,7 @@ bot.pid
 bot.log
 cloudflared.log
 cloudflared.pid
+bridge.log
 
 # IDEs
 .vscode/
