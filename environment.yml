@@ -1,0 +1,19 @@
+name: crimson-whatsapp-bot
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - flask
+    - requests
+    - python-dotenv
+    - duckduckgo-search
+    - gunicorn
+    - yt-dlp
+    - groq
+    - tiktoken
+    - playwright
+    - pytest
+    - flake8
