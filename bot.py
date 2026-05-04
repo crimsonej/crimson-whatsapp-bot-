@@ -60,13 +60,20 @@ HF_API_KEY     = os.getenv("HF_API_KEY")
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
 
 profile_mgr = ProfileManager()
-client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = None
+nvidia_client = None
 
-# NVIDIA API client (OpenAI-compatible) – primary model for tool calling
-nvidia_client = NvidiaOpenAI(
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key=os.getenv("NVIDIA_API_KEY") or NVIDIA_API_KEY or "",
-)
+def init_clients():
+    global client, nvidia_client, RIVA_AUTH
+    groq_key = _cfg.get("providers", {}).get("groq", os.getenv("GROQ_API_KEY"))
+    nvidia_key = _cfg.get("providers", {}).get("nvidia", os.getenv("NVIDIA_API_KEY"))
+    
+    client = groq.Groq(api_key=groq_key)
+    nvidia_client = NvidiaOpenAI(
+        base_url="https://integrate.api.nvidia.com/v1",
+        api_key=nvidia_key or "",
+    )
+    RIVA_AUTH = f"Bearer {nvidia_key}"
 
 # ── Riva TTS Configuration ───────────────────────────────────────────────────
 RIVA_SERVER      = "grpc.nvcf.nvidia.com:443"
@@ -500,6 +507,8 @@ def load_config() -> None:
         
     if os.environ.get("BOT_PORT"):
         _cfg["port"] = int(os.environ["BOT_PORT"])
+        
+    init_clients()
 
 # Run initialization at module level (crucial for Gunicorn)
 load_config()
@@ -1143,7 +1152,7 @@ def search_youtube(query: str, limit: int = 10) -> list[dict]:
         return []
 
 def generate_image_nvidia_flux2(prompt: str, width: int = 1024, height: int = 1024, steps: int = 4) -> str | None:
-    api_key = os.getenv("NVIDIA_API_KEY")
+    api_key = _cfg.get("providers", {}).get("nvidia", os.getenv("NVIDIA_API_KEY"))
     if not api_key:
         log.warning("[Image] NVIDIA_API_KEY not set")
         return None
@@ -1248,7 +1257,7 @@ def generate_image_auto(prompt: str, max_retries: int = 2) -> str | None:
     if img_path:
         return img_path
 
-    api_key = os.getenv("HF_API_KEY")
+    api_key = _cfg.get("providers", {}).get("huggingface", os.getenv("HF_API_KEY"))
     if api_key:
         API_URL = "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
         headers = {
